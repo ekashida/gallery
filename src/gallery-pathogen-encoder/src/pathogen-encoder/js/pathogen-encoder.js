@@ -12,7 +12,6 @@ var resolve = Y.Loader.prototype.resolve,
     GALLERY_RE      = /^(?:yui:)?gallery-([^\/]+)/,
     TYPES           = { js: true, css: true },
 
-    fallbackMode,
     customComboBase,
     maxURLLength,
     galleryVersion;
@@ -208,15 +207,13 @@ Y.Loader.prototype.customResolve = function (modules, type) {
     return comboUrls;
 };
 
-Y.Loader.prototype.pathogenSeen = {};
-
 Y.Loader.prototype.shouldFallback = function (resolved) {
     var modules,
         name,
         type;
 
-    if (fallbackMode) {
-        return fallbackMode;
+    if (this.fallbackMode) {
+        return this.fallbackMode;
     }
 
     for (type in TYPES) {
@@ -229,8 +226,8 @@ Y.Loader.prototype.shouldFallback = function (resolved) {
                     Y.log('Detected a request for a module that we have already seen: ' + name, 'warn', NAME);
                     Y.log('Falling back to default combo urls', 'warn', NAME);
 
-                    fallbackMode = true;
-                    return fallbackMode;
+                    this.fallbackMode = true;
+                    return this.fallbackMode;
                 }
             }
         }
@@ -270,8 +267,12 @@ Y.Loader.prototype.resolve = function () {
     }
 
     // Fallback to the default combo url if we need to.
-    if (Y.config.customComboFallback && this.shouldFallback(resolved)) {
-        return resolved;
+    if (Y.config.customComboFallback) {
+        this.pathogenSeen = this.pathogenSeen || {};
+
+        if (this.shouldFallback(resolved)) {
+            return resolved;
+        }
     }
 
     if (customComboBase && combine) {

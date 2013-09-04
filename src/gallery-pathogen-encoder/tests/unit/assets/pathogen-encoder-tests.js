@@ -268,19 +268,19 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 resolved;
 
             resolved = loader.resolve(true);
-            Assert.isFalse(!!loader.pathogenSeen['gallery-bitly'], 'Pathogen should not keep track of seen modules');
+            Assert.isUndefined(loader.pathogenSeen, 'Pathogen should not keep track of seen modules');
             Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
 
             resolved = loader.resolve(true);
-            Assert.isFalse(!!loader.pathogenSeen['gallery-bitly'], 'Pathogen should not keep track of seen modules');
+            Assert.isUndefined(loader.pathogenSeen, 'Pathogen should not keep track of seen modules');
             Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'hello');
         },
 
-        'test fallback mode': function () {
-            Y.config.customComboFallback = true;
-
+        'test fallback mode for gallery': function () {
             var loader,
                 resolved;
+
+            Y.config.customComboFallback = true;
 
             loader = new Y.Loader({
                 combine: true,
@@ -291,7 +291,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                     }
                 }
             });
-            Assert.isUndefined(loader.pathogenSeen['gallery-bitly'], 'Module should not have been seen yet');
+            Assert.isUndefined(loader.pathogenSeen, 'Pathogen should not keep track of seen modules yet');
 
             resolved = loader.resolve(true);
             Assert.isTrue(loader.pathogenSeen['gallery-bitly'], 'Pathogen should be keeping track of seen modules');
@@ -303,8 +303,36 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 resolved.js[0],
                 'Should have fallen back to default combo url'
             );
+        },
+
+        'test fallback mode for core': function () {
+            var loader,
+                resolved;
+
+            Y.config.customComboFallback = true;
+
+            loader = new Y.Loader({
+                combine: true,
+                ignoreRegistered: true,
+                require: ['oop']
+            });
+            Assert.isUndefined(loader.pathogenSeen, 'Pathogen should not keep track of seen modules yet');
+
+            resolved = loader.resolve(true);
+            Assert.isTrue(loader.pathogenSeen.oop, 'Pathogen should have seen the oop module');
+            Assert.isTrue(loader.pathogenSeen['yui-base'], 'Pathogen should have seen the yui-base module');
+            Assert.areEqual('http://combo.yuilibrary.com/p/core+3.11.0+yui-base,oop.js', resolved.js[0], 'Unexpected combo url');
+
+            resolved = loader.resolve(true);
+            Assert.areEqual(
+                'http://yui.yahooapis.com/combo?3.11.0/yui-base/yui-base-min.js&3.11.0/oop/oop-min.js',
+                resolved.js[0],
+                'Should have fallen back to default combo url'
+            );
         }
     }));
+
+//Assert.isUndefined(JSON.stringify(loader.pathogenSeen, null, 4));
 
     Y.Test.Runner.add(suite);
 });
