@@ -248,5 +248,63 @@ YUI.add('pathogen-encoder-tests', function (Y) {
         }
     }));
 
+    suite.add(new Y.Test.Case({
+        name: 'Test Fallback Mode',
+
+        setUp: function () {
+            Y.config.customComboBase = 'http://combo.yuilibrary.com/';
+        },
+
+        'test fallback mode off by default': function () {
+            var loader = new Y.Loader({
+                    combine: true,
+                    require: ['gallery-bitly'],
+                    modules: {
+                        'gallery-bitly': {
+                            group: 'gallery'
+                        }
+                    }
+                }),
+                resolved;
+
+            resolved = loader.resolve(true);
+            Assert.isFalse(!!loader.pathogenSeen['gallery-bitly'], 'Pathogen should not keep track of seen modules');
+            Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
+
+            resolved = loader.resolve(true);
+            Assert.isFalse(!!loader.pathogenSeen['gallery-bitly'], 'Pathogen should not keep track of seen modules');
+            Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'hello');
+        },
+
+        'test fallback mode': function () {
+            Y.config.customComboFallback = true;
+
+            var loader,
+                resolved;
+
+            loader = new Y.Loader({
+                combine: true,
+                require: ['gallery-bitly'],
+                modules: {
+                    'gallery-bitly': {
+                        group: 'gallery'
+                    }
+                }
+            });
+            Assert.isUndefined(loader.pathogenSeen['gallery-bitly'], 'Module should not have been seen yet');
+
+            resolved = loader.resolve(true);
+            Assert.isTrue(loader.pathogenSeen['gallery-bitly'], 'Pathogen should be keeping track of seen modules');
+            Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
+
+            resolved = loader.resolve(true);
+            Assert.areEqual(
+                'http://yui.yahooapis.com/combo?gallery-2013.08.07-20-34/build/gallery-bitly/gallery-bitly-min.js',
+                resolved.js[0],
+                'Should have fallen back to default combo url'
+            );
+        }
+    }));
+
     Y.Test.Runner.add(suite);
 });

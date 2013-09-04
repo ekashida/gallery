@@ -12,6 +12,7 @@ var resolve = Y.Loader.prototype.resolve,
     GALLERY_RE      = /^(?:yui:)?gallery-([^\/]+)/,
     TYPES           = { js: true, css: true },
 
+    fallbackMode,
     customComboBase,
     maxURLLength,
     galleryVersion;
@@ -160,6 +161,13 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         source[key] = source[key] || [];
 
         source[key].push(name);
+
+        if (Y.config.customComboFallback) {
+            if (group === 'gallery') {
+                name = 'gallery-' + name;
+            }
+            this.pathogenSeen[name] = true;
+        }
     }
 
     return source;
@@ -200,6 +208,35 @@ Y.Loader.prototype.customResolve = function (modules, type) {
     return comboUrls;
 };
 
+Y.Loader.prototype.pathogenSeen = {};
+
+Y.Loader.prototype.shouldFallback = function (resolved) {
+    var modules,
+        name,
+        type;
+
+    if (fallbackMode) {
+        return fallbackMode;
+    }
+
+    for (type in TYPES) {
+        if (TYPES.hasOwnProperty(type)) {
+            modules = resolved[type + 'Mods'];
+            for (i = 0, len = modules.length; i < len; i += 1) {
+                name = modules[i].name;
+
+                if (this.pathogenSeen[name]) {
+                    Y.log('Detected a request for a module that we have already seen: ' + name, 'warn', NAME);
+                    Y.log('Falling back to default combo urls', 'warn', NAME);
+
+                    fallbackMode = true;
+                    return fallbackMode;
+                }
+            }
+        }
+    }
+};
+
 Y.Loader.prototype.resolve = function () {
     var resolved = resolve.apply(this, arguments),
         combine  = this.combine,
@@ -227,8 +264,14 @@ Y.Loader.prototype.resolve = function () {
         }
     }
 
+    // Add the pathogen namespace to the combo base.
     if (Y.config.customComboBase) {
         customComboBase = Y.config.customComboBase + NAMESPACE;
+    }
+
+    // Fallback to the default combo url if we need to.
+    if (Y.config.customComboFallback && this.shouldFallback(resolved)) {
+        return resolved;
     }
 
     if (customComboBase && combine) {
@@ -252,8 +295,7 @@ Y.Loader.prototype.resolve = function () {
                 url = resolvedUrls[i];
                 if (
                     typeof url === 'object' ||
-                    typeof url === 'string' &&
-                    url.indexOf('/combo?') === -1
+                    (typeof url === 'string' && url.indexOf('/combo?') === -1)
                 ) {
                     singles.push(url);
                 }
@@ -276,4 +318,4 @@ Y.Loader.prototype.resolve = function () {
     return resolved;
 };
 
-}, '@VERSION@', { requires: ['loader-base'] });
+}, '@BETA@', { requires: ['loader-base'] });
