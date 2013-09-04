@@ -5,6 +5,7 @@ Loader](http://yuilibrary.com/yui/docs/yui/loader.html) to generate
 pathogen-encoded combo urls. It should be loaded as part of an application's
 seed, and added to the [list of core
 modules](http://yuilibrary.com/yui/docs/api/classes/config.html#property_core).
+Meant for bucket testing purposes only!
 
 ## Overview
 
