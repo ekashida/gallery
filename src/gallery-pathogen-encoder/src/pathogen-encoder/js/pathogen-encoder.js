@@ -4,7 +4,7 @@ var resolve = Y.Loader.prototype.resolve,
 
     NAMESPACE       = 'p/',
     GROUP_DELIM     = ';',
-    SUBMODULE_DELIM = '+',
+    SUB_GROUP_DELIM = '+',
     MODULE_DELIM    = ',',
 
     FILTER_RE       = /-(min|debug).js/,
@@ -42,7 +42,7 @@ Y.Loader.prototype.buildCombo = function (source, comboBase, comboTail) {
 
             while (modules.length) {
                 prepend = currDelim + currKey;
-                prepend = prepend ? prepend + SUBMODULE_DELIM : MODULE_DELIM;
+                prepend = prepend ? prepend + SUB_GROUP_DELIM : MODULE_DELIM;
                 token   = prepend + modules[0];
 
                 if (currLen + token.length < maxURLLength) {
@@ -156,7 +156,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         // YUI core:    `core+3.12.0`
         // YUI gallery: `gallery+2013.06.20-02-07`
         // YUI etc:     `os/mit/td/td-applet-weather-0.0.86`
-        key = group ? group + SUBMODULE_DELIM + version : version;
+        key = group ? group + SUB_GROUP_DELIM + version : version;
         source[key] = source[key] || [];
 
         source[key].push(name);
