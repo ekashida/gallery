@@ -126,6 +126,11 @@ YUI({
 </script>
 ```
 
+For a working example, see [this
+test](https://github.com/ekashida/gallery/blob/master/src/gallery-pathogen-encoder/tests/unit/index.html).
+You'll need to `npm install` beforehand to make all the YUI assets locally
+available.
+
 * As long as steps 1 and 2 happen before creating the instance, Loader will start
   producing pathogen-encoded urls.
 * This submodule does no work unless the `customComboBase` configuration is
