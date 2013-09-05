@@ -93,4 +93,60 @@ http://yui.yahooapis.com/{routePath}/core+3.10.3+cssreset,cssbase.min.css
 http://yui.yahooapis.com/{routePath}/core+3.10.3+cssreset,cssbase.raw.css
 ```
 
+## Integrating the encoder
+
+There are 3 steps that need to happen in order to integrate with YUI Loader:
+
+1) Deliver the module as part of the application seed
+
+```
+// Together with the YUI seed
+<script src="http://yui.yahooapis.com/combo?3.10.3/yui/yui-min.js&gallery-2013.09.04-21-56/gallery-pathogen-encoder/gallery-pathogen-encoder-min.js"></script>
+
+// Or separately
+<script src="http://yui.yahooapis.com/3.10.3/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/gallery-2013.09.04-21-56/gallery-pathogen-encoder/gallery-pathogen-encoder-min.js"></script>
+```
+
+2) Add the module to the list of core modules
+
+```
+<script>
+YUI.Env.core.push('gallery-pathogen-encoder');
+</script>
+```
+
+3) Configure the YUI instance with the custom combo base
+
+```
+<script>
+YUI({
+    customComboBase: $customComboBase
+}).use('node', function (Y) { ... };
+</script>
+```
+
+* As long as steps 1 and 2 happen before creating the instance, Loader will start
+  producing pathogen-encoded urls.
+* This submodule does no work unless the `customComboBase` configuration is
+  set, so it can be used as a switch for the YUI combo handler.
+
+## Additional features
+
+### Falling back to the default combo url
+
+When `customComboFallback` is set to `true`, Loader will fall back to the
+default combo url if any module fails to load via the pathogen-encoded url.
+
+```
+<script>
+YUI({
+    customComboBase: $customComboBase,
+    customComboFallback: true
+}).use('node', function (Y) { ... };
+</script>
+```
+
+
+
 [1] https://developers.google.com/speed/docs/best-practices/caching
