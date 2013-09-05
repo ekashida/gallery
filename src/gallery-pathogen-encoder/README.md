@@ -95,6 +95,12 @@ http://yui.yahooapis.com/{routePath}/core+3.10.3+cssreset,cssbase.raw.css
 
 ## Integrating the encoder
 
+We use the gallery tag `gallery-2013.09.04-21-56` in the example below, but you
+should check the [yui3-gallery](https://github.com/yui/yui3-gallery) for the
+latest tag which will get you the latest version of the pathogen encoder.
+
+### Steps
+
 There are 3 steps that need to happen in order to integrate with YUI Loader:
 
 1) Deliver the module as part of the application seed
@@ -121,7 +127,8 @@ YUI.Env.core.push('gallery-pathogen-encoder');
 ```
 <script>
 YUI({
-    customComboBase: $customComboBase
+    customComboBase: $customComboBase,
+    gallery: 'gallery-2013.09.04-21-56'
 }).use('node', function (Y) { ... };
 </script>
 ```
