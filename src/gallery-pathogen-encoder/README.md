@@ -99,9 +99,13 @@ We use the gallery tag `gallery-2013.09.04-21-56` in the example below, but you
 should check the [yui3-gallery](https://github.com/yui/yui3-gallery) for the
 latest tag which will get you the latest version of the pathogen encoder.
 
+Also note that the `debug` filter will print out some useful log statements
+(i.e., the number of combo urls that would have been generated as well as the
+number of pathogen-encoded combo urls that have been generated).
+
 ### Steps
 
-There are 3 steps that need to happen in order to integrate with YUI Loader:
+There are 3 required steps for integration with YUI Loader:
 
 1) Deliver the module as part of the application seed
 
@@ -127,8 +131,7 @@ YUI.Env.core.push('gallery-pathogen-encoder');
 ```
 <script>
 YUI({
-    customComboBase: $customComboBase,
-    gallery: 'gallery-2013.09.04-21-56'
+    customComboBase: $customComboBase
 }).use('node', function (Y) { ... };
 </script>
 ```
@@ -138,10 +141,10 @@ test](https://github.com/ekashida/gallery/blob/master/src/gallery-pathogen-encod
 You'll need to `npm install` beforehand to make all the YUI assets locally
 available.
 
-* As long as steps 1 and 2 happen before creating the instance, Loader will start
+* As long as steps 1 and 2 happen before instantiation, Loader will start
   producing pathogen-encoded urls.
 * This submodule does no work unless the `customComboBase` configuration is
-  set, so it can be used as a switch for the YUI combo handler.
+  set. `customComboBase` can be used as a switch for the YUI combo handler.
 
 ## Additional features
 
