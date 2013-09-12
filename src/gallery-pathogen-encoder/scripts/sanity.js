@@ -175,7 +175,7 @@ lib.async.series(jobs, function () {
     }
 });
 
-lib.http.get(comboBase + '/cc/p/core+3.12.0+yui.js')
+lib.http.get(comboBase + '/cc/p/core+3.12.0+yui.js?secure=1')
     .on('response', function (res) {
         var buffer = [];
 
@@ -202,4 +202,5 @@ lib.http.get(comboBase + '/cc/p/core+3.12.0+yui.js')
     }).on('error', function (err) {
         console.log('✘', combo);
         console.log('There was an error making the request: ' + err.message);
+        process.exit(1);
     });
