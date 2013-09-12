@@ -146,9 +146,15 @@ var args = process.argv.slice(2),
                             options.agent = false;
 
                             lib.http.get(options, function (res) {
-                                console.log('✔', combo);
-                                successes.push(combo);
-                                return callback();
+                                if (res.statusCode === 200) {
+                                    console.log('✔', combo);
+                                    successes.push(combo);
+                                    return callback();
+                                } else {
+                                    console.log('✘', combo);
+                                    failures.push(combo);
+                                    return callback(err);
+                                }
                             }).on('error', function (err) {
                                 console.log('✘', combo);
                                 failures.push(combo);
