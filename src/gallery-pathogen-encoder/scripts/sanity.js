@@ -4,7 +4,7 @@
 
 var args = process.argv.slice(2),
 
-    host = args[0],
+    comboBase = args[0],
 
     lib = {
         http:   require('http'),
@@ -139,7 +139,7 @@ var args = process.argv.slice(2),
                 if (fragments.hasOwnProperty(fragment)) {
                     jobs.push((function (path, fragment, filter) {
                         return function (callback) {
-                            var base    = host + path;
+                            var base    = comboBase + path,
                                 combo   = base + '/' + fragment + filter + '.' + type,
                                 options = lib.url.parse(combo);
 
@@ -174,3 +174,32 @@ lib.async.series(jobs, function () {
         console.log(JSON.stringify(failures, null, 4));
     }
 });
+
+lib.http.get(comboBase + '/cc/p/core+3.12.0+yui.js')
+    .on('response', function (res) {
+        var buffer = [];
+
+        if (!res.headers.expires || !res.headers['cache-control']) {
+            console.log('✘', 'Cache headers are not set correctly');
+            process.exit(1);
+        }
+
+        res.on('data', function (chunk) {
+            buffer.push(chunk);
+        });
+
+        res.on('end', function () {
+            var body = Buffer.concat(buffer).toString('utf8');
+            if (body.indexOf('https://yui-s') === -1) {
+                console.log('✘', 'Failed to include ssl assets');
+                process.exit(1);
+            } else {
+                console.log('✔', 'Successfully included ssl assets');
+            }
+
+            console.log(body);
+        });
+    }).on('error', function (err) {
+        console.log('✘', combo);
+        console.log('There was an error making the request: ' + err.message);
+    });
