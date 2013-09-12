@@ -244,6 +244,13 @@ Y.Loader.prototype.customResolve = function (modules, type) {
     return comboUrls;
 };
 
+/**
+Determines whether or not we should fallback to default combo urls by checking
+to see if Loader re-requests any module that we've already seen.
+@method shouldFallback
+@param {Object} resolved Resolved module metadata by original `resolve`.
+@return {Boolean} Whether or not to fallback.
+**/
 Y.Loader.prototype.shouldFallback = function (resolved) {
     var modules,
         name,
@@ -271,6 +278,12 @@ Y.Loader.prototype.shouldFallback = function (resolved) {
     }
 };
 
+/**
+Wraps Loader's `resolve` method and uses the module metadata returned by it to
+encode pathogen urls. Note that we will incur the cost of encoding default
+combo urls until we replace the encoding logic in core.
+@method resolve
+**/
 Y.Loader.prototype.resolve = function () {
     var resolved = resolve.apply(this, arguments),
         combine  = this.combine,
