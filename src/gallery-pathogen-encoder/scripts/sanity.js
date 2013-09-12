@@ -126,11 +126,14 @@ var args = process.argv.slice(2),
 ['/cc/p', '/check/cc/p'].forEach(function (path) {
     ['js', 'css'].forEach(function (type) {
         var fragments   = FRAGMENTS[type],
-            filters     = FILTER[type],
-            fragment;
+            filters     = FILTER[type];
 
         filters.forEach(function (f) {
-            var filter  = f ? '.' + f : '';
+            // `filter` will be an empty string when we want to test the case
+            // where it defaults to 'min'; otherwise, it will be '.raw',
+            // '.debug', or '.min'.
+            var filter  = f ? '.' + f : '',
+                fragment;
 
             for (fragment in fragments) {
                 if (fragments.hasOwnProperty(fragment)) {
