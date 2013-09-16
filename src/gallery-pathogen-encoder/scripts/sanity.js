@@ -153,7 +153,7 @@ var args = process.argv.slice(2),
                                 } else {
                                     console.log('✘', combo);
                                     failures.push(combo);
-                                    return callback(err);
+                                    return callback('statusCode !== 200');
                                 }
                             }).on('error', function (err) {
                                 console.log('✘', combo);
