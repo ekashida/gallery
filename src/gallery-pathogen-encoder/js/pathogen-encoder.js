@@ -80,7 +80,6 @@ core and gallery groups, and just "$root" for all other groups.
 Y.Loader.prototype.aggregateGroups = function (modules) {
     var source = {},
         galleryMatch,
-        comboBase,
         version,
         group,
         meta,
@@ -128,16 +127,6 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         }
         // All other YUI module groups.
         else {
-            comboBase = meta.comboBase;
-
-            // Combo base is not set or the combo base is unrecognized.
-            if (
-                !comboBase ||
-                comboBase.indexOf('.yimg.com/zz/combo?') === -1
-            ) {
-                continue;
-            }
-
             version = meta.root;
             group   = '';
             name    = name.split(EXTENSION_RE).shift(); // remove extension
