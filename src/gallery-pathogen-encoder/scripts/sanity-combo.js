@@ -59,6 +59,15 @@ var args = process.argv.slice(2),
                 'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-bitly/gallery-bitly',
                 'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-headerview/af-applet-headerview',
                 'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview'
+            ],
+
+            // lang
+            'core+3.12.0+lang/autocomplete-list_en': [
+                'http://yui.yahooapis.com/3.12.0/autocomplete-list/lang/autocomplete-list_en.js'
+            ],
+            // lang bundle bug where a language tag was required
+            'core+3.12.0+lang/autocomplete-list': [
+                'http://yui.yahooapis.com/3.12.0/autocomplete-list/lang/autocomplete-list.js'
             ]
         },
         css: {
