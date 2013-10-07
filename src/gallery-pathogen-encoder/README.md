@@ -93,7 +93,7 @@ http://yui.yahooapis.com/{routePath}/core+3.10.3+cssreset,cssbase.min.css
 http://yui.yahooapis.com/{routePath}/core+3.10.3+cssreset,cssbase.raw.css
 ```
 
-## Integrating the encoder
+## Integrating the encoder manually
 
 We use the gallery tag `gallery-2013.09.04-21-56` in the example below, but you
 should check the [yui3-gallery](https://github.com/yui/yui3-gallery) for the
@@ -145,6 +145,37 @@ available.
   producing pathogen-encoded urls.
 * This submodule does no work unless the `customComboBase` configuration is
   set. `customComboBase` can be used as a switch for the YUI combo handler.
+
+## Integrating the encoder using express-yui
+
+There are 3 required steps for integration with express-yui.
+
+1) Add the module to your application so that it gets deployed to the CDN as
+part of your CI
+
+2) Enable the encoder
+
+```
+var express = require('express');
+var encoder = require('yui-pathogen-encoder');
+...
+encoder.enable(express);
+...
+```
+
+3) Specify the `customComboBase` config
+
+```
+app.yui.applyConfig({
+    customComboBase: $customComboBase
+});
+```
+
+Check out the [working
+example](https://github.com/ekashida/gallery/tree/master/src/gallery-pathogen-encoder/example).
+Due to the nature of how Locator works, you will have to `npm link
+yui-pathogen-encoder` into the example directory after doing an `npm link` in
+this module's root directory.
 
 ## Additional features
 
