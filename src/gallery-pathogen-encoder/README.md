@@ -156,10 +156,10 @@ part of your CI
 2) Enable the encoder
 
 ```
-var express = require('express');
+var app = require('express')();
 var encoder = require('yui-pathogen-encoder');
 ...
-encoder.enable(express);
+encoder.enable(app);
 ...
 ```
 
