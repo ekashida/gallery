@@ -51,6 +51,16 @@ var args = process.argv.slice(2),
                 'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-editview'
             ],
 
+            // Short groups
+            'c+3.12.0+yui,widget-base;g+2013.09.04-21-56+pathogen-encoder,bitly;r+os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview;p+os/mit/td/ape-applet-0.0.61+af-applet-editview/af-applet-editview': [
+                'http://yui.yahooapis.com/3.12.0/build/yui/yui',
+                'http://yui.yahooapis.com/3.12.0/build/widget-base/widget-base',
+                'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-pathogen-encoder/gallery-pathogen-encoder',
+                'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-bitly/gallery-bitly',
+                'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-headerview/af-applet-headerview',
+                'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview'
+            ],
+
             // All together now:
             'core+3.12.0+yui,widget-base;gallery+2013.09.04-21-56+pathogen-encoder,bitly;os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview;os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview': [
                 'http://yui.yahooapis.com/3.12.0/build/yui/yui',
