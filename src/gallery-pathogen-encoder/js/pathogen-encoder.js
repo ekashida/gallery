@@ -335,7 +335,6 @@ PrefixTree.prototype = {
 
     getLeafNodes: function (tree) {
         var leaves = [],
-            child,
             key;
 
         // base case
@@ -346,9 +345,10 @@ PrefixTree.prototype = {
 
         for (key in tree.children) {
             if (tree.children.hasOwnProperty(key)) {
-                child = tree.children[key];
                 leaves = leaves.concat(
-                    this.getLeafNodes(child)
+                    this.getLeafNodes(
+                        tree.children[key]
+                    )
                 );
             }
         }
