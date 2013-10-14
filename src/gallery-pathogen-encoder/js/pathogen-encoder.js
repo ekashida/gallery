@@ -150,15 +150,26 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         // add them to the prefix tree and subsequently segment these modules
         // into the `path` group.
         else {
-            prefixTree = prefixTree || new PrefixTree();
-            prefixTree.add(mod.path.split(EXTENSION_RE).shift());
-            continue;
+            // remove file extension
+            name = mod.path.split(EXTENSION_RE).shift();
+
+            // If fullpath compression is enabled, add this module's fullpath
+            // to the prefix tree for later compression
+            if (Y.config.fullpathCompression) {
+                prefixTree = prefixTree || new PrefixTree();
+                prefixTree.add(name);
+                continue;
+            }
+
+            // Tag this module as `path` so that we know to include the
+            // full path in the combo url later on
+            key = 'path' + SUB_GROUP_DELIM + name;
         }
 
         source[key] = source[key] || [];
         source[key].push(name);
 
-        // Record the full module name as seen
+        // If fallback feature is enabled, record the full module name as seen
         if (Y.config.customComboFallback) {
             if (mod.group === 'gallery') {
                 name = 'gallery-' + name;
@@ -311,7 +322,6 @@ PrefixTree.prototype = {
                 // of its child nodes combined, it means that we'll get better
                 // compression by using each child node as an individual root.
                 Y.log('Scheduling ' + children.length + ' child(ren) of "' + node.path + '" for further processing...', 'debug', 'PrefixTree');
-
                 process = process.concat(children);
             }
         }

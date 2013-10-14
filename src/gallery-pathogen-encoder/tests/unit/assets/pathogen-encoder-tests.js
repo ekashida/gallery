@@ -16,6 +16,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
         setUp: function () {
             Y.config.customComboBase = 'http://combo.yuilibrary.com/';
+            Y.config.fullpathCompression = true;
             customComboBase = Y.config.customComboBase + NAMESPACE;
         },
 
@@ -571,6 +572,97 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 'http://yui.yahooapis.com/combo?' + Y.version + '/yui-base/yui-base-min.js&' + Y.version + '/oop/oop-min.js',
                 resolved.js[0],
                 'Should have fallen back to default combo url'
+            );
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'Test non-compressed fullpath modules',
+
+        setUp: function () {
+            Y.config.customComboBase = 'http://combo.yuilibrary.com/';
+        },
+
+        'test fullpath compression off by default': function () {
+            var modules = {},
+                resolved,
+                loader,
+                paths;
+
+            paths = [
+                'eu/ai/tora.js',
+                'eu/ai/maru.js',
+                'eu/ai/yui.js'
+            ];
+
+            paths.forEach(function (path) {
+                modules[path] = {
+                    group: 'eu',
+                    path: path
+                };
+            });
+
+            Y.config.fullpathCompression = false;
+            loader = new Y.Loader({
+                combine: true,
+                require: paths,
+                groups: {
+                    'eu': {
+                        comboBase: 'http://l.yimg.com/zz/combo?',
+                        root: '/',
+                        combine: true
+                    }
+                },
+                modules: modules
+            });
+
+            resolved = loader.resolve(true);
+            Assert.areEqual(
+                'http://combo.yuilibrary.com/p/eu/ai/maru;eu/ai/tora;eu/ai/yui.js',
+                resolved.js[0],
+                'Fullpath compression should be off by default'
+            );
+
+        },
+
+        'test fullpath compression enabled': function () {
+            var modules = {},
+                resolved,
+                loader,
+                paths;
+
+            paths = [
+                'eu/ai/tora.js',
+                'eu/ai/maru.js',
+                'eu/ai/yui.js'
+            ];
+
+            paths.forEach(function (path) {
+                modules[path] = {
+                    group: 'eu',
+                    path: path
+                };
+            });
+
+            Y.config.fullpathCompression = true;
+            loader = new Y.Loader({
+                combine: true,
+                require: paths,
+                groups: {
+                    'eu': {
+                        comboBase: 'http://l.yimg.com/zz/combo?',
+                        root: '/',
+                        combine: true
+                    }
+                },
+                modules: modules
+            });
+
+            resolved = loader.resolve(true);
+            Assert.areEqual(
+                'http://combo.yuilibrary.com/p/p+eu/ai+maru,tora,yui.js',
+                resolved.js[0],
+                'Fullpath compression did not work as expected'
             );
         }
     }));
