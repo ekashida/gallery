@@ -76,19 +76,19 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 modules;
 
             urls = resolved.js;
-            Assert.areEqual(1, urls.length, 'There should only be one combo url');
+            Assert.areEqual(1, urls.length, 'Unexpected number of urls');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(1, groups.length, 'There should only be one group of gallery modules');
+            Assert.areEqual(1, groups.length, 'Unexpected number of groups');
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
-            Assert.areEqual(3, subgroups.length, 'There should only be three subgroups');
+            Assert.areEqual(3, subgroups.length, 'Unexpected number of subgroups');
             Assert.areEqual('g', subgroups[0], 'Unexpected gallery identifier');
             Assert.areEqual('2013.08.07-20-34', subgroups[1], 'Unexpected gallery version');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.isTrue(modules.length === 2, 'Missing modules in the gallery-only combo url');
+            Assert.areEqual(2, modules.length, 'Unexpected number of modules');
         },
 
         'test prefix tree compression': function () {
@@ -135,7 +135,6 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 'kx/yucs/uh3/location/js/7/uh_locdrop-min.js'
             ],
             modules = {},
-            subgroups,
             resolved,
             loader,
             groups,
@@ -164,15 +163,15 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             resolved = loader.resolve(true);
 
             urls = resolved.js;
-            Assert.areEqual(2, urls.length);
+            Assert.areEqual(2, urls.length, 'Unexpected number of urls');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(5, groups.length);
+            Assert.areEqual(5, groups.length, 'Unexpected number of groups');
 
             path   = urls[1].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(4, groups.length);
+            Assert.areEqual(4, groups.length, 'Unexpected number of groups');
         },
 
         'test prefix tree compression efficiency (1)': function () {
@@ -183,8 +182,8 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 loader;
 
             // oneGroup is shorter here
-            oneGroup  = 'http://combo.yuilibrary.com/p/p+foobar+a/maru,a/tora,a/yui,b/maru,b/tora,b/yui.js',
-            twoGroups = 'http://combo.yuilibrary.com/p/p+foobar/a+maru,tora,yui;p+foobar/b+maru,tora,yui.js',
+            oneGroup  = 'http://combo.yuilibrary.com/p/p+foobar+a/maru,a/tora,a/yui,b/maru,b/tora,b/yui.js';
+            twoGroups = 'http://combo.yuilibrary.com/p/p+foobar/a+maru,tora,yui;p+foobar/b+maru,tora,yui.js';
 
             paths = [
                 'foobar/a/tora.js',
@@ -237,8 +236,8 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             ];
 
             // twoGroups is shorter here
-            oneGroup  = 'http://combo.yuilibrary.com/p/p+foob+a/maru,a/tora,a/yui,b/maru,b/tora,b/yui.js',
-            twoGroups = 'http://combo.yuilibrary.com/p/p+foob/a+maru,tora,yui;p+foob/b+maru,tora,yui.js',
+            oneGroup  = 'http://combo.yuilibrary.com/p/p+foob+a/maru,a/tora,a/yui,b/maru,b/tora,b/yui.js';
+            twoGroups = 'http://combo.yuilibrary.com/p/p+foob/a+maru,tora,yui;p+foob/b+maru,tora,yui.js';
 
             paths.forEach(function (path) {
                 modules[path] = {
@@ -308,19 +307,19 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 modules;
 
             urls = resolved.js;
-            Assert.areEqual(1, urls.length, 'Expected one url');
+            Assert.areEqual(1, urls.length, 'Unexpected number of urls');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(1, groups.length, 'Expected one group');
+            Assert.areEqual(1, groups.length, 'Unexpected number of groups');
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
-            Assert.areEqual(3, subgroups.length, 'Expected three subgroups');
+            Assert.areEqual(3, subgroups.length, 'Unexpected number of subgroups');
             Assert.areEqual('r', subgroups[0], 'Unexpected group id');
             Assert.areEqual('os/mit/td/ape-af-0.0.38', subgroups[1], 'Unexpected root');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.areEqual(3, modules.length, 'Expected three modules');
+            Assert.areEqual(3, modules.length, 'Unexpected number of modules');
         },
 
         'test basic formatting for path groups': function () {
@@ -359,19 +358,19 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 groups;
 
             urls = resolved.js;
-            Assert.areEqual(1, urls.length, 'Expected one url');
+            Assert.areEqual(1, urls.length, 'Unexpected number of urls');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(1, groups.length, 'Expected one group');
+            Assert.areEqual(1, groups.length, 'Unexpected number of groups');
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
-            Assert.areEqual(3, subgroups.length, 'Expected three subgroups');
+            Assert.areEqual(3, subgroups.length, 'Unexpected number o subgroups');
             Assert.areEqual('p', subgroups[0], 'Unexpected group id');
             Assert.areEqual('path/to/file', subgroups[1], 'Unexpected root');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.areEqual(3, modules.length, 'Expected three modules');
+            Assert.areEqual(3, modules.length, 'Unexpected number of modules');
         }
     }));
 
