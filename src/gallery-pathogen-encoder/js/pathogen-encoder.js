@@ -282,7 +282,7 @@ PrefixTree.prototype = {
             }
         }
 
-        Y.log(this.stringify(), 'debug', 'PrefixTree');
+        Y.log(this.stringify(this.tree), 'debug', 'PrefixTree');
 
         while (process.length) {
             total    = 0;
@@ -341,9 +341,7 @@ PrefixTree.prototype = {
             }
         }
 
-        if (JSON) {
-            Y.log(JSON.stringify(compressed, null, 4), 'debug');
-        }
+        Y.log(this.stringify(compressed), 'debug', 'PrefixTree');
 
         return compressed;
     },
@@ -375,9 +373,8 @@ PrefixTree.prototype = {
         this.tree = null;
     },
 
-    // For debugging
-    stringify: function () {
-        return JSON && JSON.stringify(this.tree, null, 4);
+    stringify: function (thing) {
+        return JSON && JSON.stringify(thing, null, 4);
     }
 
 };
