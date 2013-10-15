@@ -156,7 +156,12 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             // If fullpath compression is enabled, add this module's fullpath
             // to the prefix tree for later compression
             if (Y.config.fullpathCompression) {
-                prefixTree = prefixTree || new PrefixTree();
+                prefixTree = prefixTree || new PrefixTree({
+                    rootPrefix:     'p+',
+                    moduleDelim:    MODULE_DELIM,
+                    subgroupDelim:  SUB_GROUP_DELIM,
+                    groupDelim:     GROUP_DELIM
+                });
                 prefixTree.add(name);
                 continue;
             }
@@ -194,12 +199,17 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
     return source;
 };
 
-function PrefixTree () {
+function PrefixTree (config) {
     this.tree = {
         weight: Number.MAX_VALUE,
         path: '/',
         children: {}
     };
+
+    this.rootPrefixLen     = config.rootPrefix.length    || 0;
+    this.moduleDelimLen    = config.moduleDelim.length   || 0;
+    this.subgroupDelimLen  = config.subgroupDelim.length || 0;
+    this.groupDelimLen     = config.groupDelim.length    || 0;
 }
 
 PrefixTree.prototype = {
@@ -230,16 +240,19 @@ PrefixTree.prototype = {
 
                 // If not leaf node
                 if (remainingPath) {
-                    // Account for the length of the subgroup delimiter (1)
-                    child.weight += traversedPath.length + 1 + remainingPath.length;
+                    child.weight += traversedPath.length + remainingPath.length;
+
+                    // Account for the length of the subgroup delimiter
+                    child.weight += this.subgroupDelimLen;
+
                     child.children = {};
                 } else {
-                    // Leaf nodes should never be roots
+                    // Guarantee that leaf nodes will never be roots
                     child.weight = Number.MAX_VALUE;
                 }
             } else {
-                // Account for the length of the module delimiter (1)
-                child.weight += 1 + remainingPath.length;
+                // Account for the length of the module delimiter
+                child.weight += this.moduleDelimLen + remainingPath.length;
             }
 
             // bubble down
@@ -277,8 +290,8 @@ PrefixTree.prototype = {
 
             node = process.pop();
 
-            // Account for the length of the initial 'p+'
-            weight = 2 + node.weight;
+            // Account for the length of the root prefix
+            weight = this.rootPrefixLen + node.weight;
 
             // Find the total resulting weight if we use the children of this
             // node as roots
@@ -286,10 +299,12 @@ PrefixTree.prototype = {
                 if (node.children.hasOwnProperty(key)) {
                     child = node.children[key];
 
-                    // Account for the length of the initial (p+) and
-                    // subsequent (;p+) group delimiters for every additional
-                    // root that we add
-                    total += children.length ? 3 : 2;
+                    // Account for the length of the initial and subsequent
+                    // group delimiters for every additional root
+                    total += children.length ?
+                             this.groupDelimLen + this.rootPrefixLen :  // ;p+
+                             this.rootPrefixLen;                        //  p+
+
                     total += child.weight;
 
                     children.push(child);
