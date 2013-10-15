@@ -199,6 +199,13 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
     return source;
 };
 
+/**
+A class that represents a prefix tree data structure for file paths. The main
+purpose of this class is to optimally compress itself when the added paths need
+to be serialized.
+@class PrefixTree
+@constructor
+**/
 function PrefixTree (config) {
     this.tree = {
         weight: Number.MAX_VALUE,
@@ -214,6 +221,15 @@ function PrefixTree (config) {
 
 PrefixTree.prototype = {
 
+    /**
+    Adds a path to the prefix tree instance. Calculates the weight of each node
+    as paths are added. The weight of a node represents the number of
+    characters in the the path value of the node, combined with the number of
+    characters in the path value of each of its children's paths (relative to
+    the node's path value).
+    @method add
+    @param {String} fullpath A path
+    **/
     add: function (fullpath) {
         var currentNode = this.tree,
             remaining   = fullpath.split('/'),
@@ -262,6 +278,13 @@ PrefixTree.prototype = {
         Y.log('Added ' + currentNode.path, 'debug', 'PrefixTree');
     },
 
+    /**
+    Compresses the prefix tree. Uses a depth-first search to find the optimal
+    set of roots to serialize all the added paths.
+    @method compress
+    @return {Array} compressed An array of (root path, module path) pairs that
+        represent the the optimal way to serialize the prefix tree.
+    **/
     compress: function () {
         var process     = [],
             compressed  = [],
@@ -346,6 +369,12 @@ PrefixTree.prototype = {
         return compressed;
     },
 
+    /**
+    Finds all the leaf nodes of a given node
+    @method getLeafNodes
+    @param {Object} tree A node in the prefix tree
+    @return {Array} All leaf nodes of a particular node
+    **/
     getLeafNodes: function (tree) {
         var leaves = [],
             key;
@@ -369,6 +398,10 @@ PrefixTree.prototype = {
         return leaves;
     },
 
+    /**
+    Destroys the instance to free up memory
+    @method destroy
+    **/
     destroy: function () {
         this.tree = null;
     },
