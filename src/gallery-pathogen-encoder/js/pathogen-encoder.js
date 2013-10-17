@@ -595,7 +595,7 @@ Y.Loader.prototype.resolve = function () {
             // Generate custom combo urls.
             comboUrls = this.customResolve(resolvedMods, type);
 
-            if (JSON) {
+            if (window.JSON) {
                 Y.log('Default encoding resulted in ' + resolved[type].length + ' URLs', 'info', NAME);
                 Y.log(JSON.stringify(resolved[type], null, 4), 'info', NAME);
                 Y.log('Custom encoding resulted in ' + comboUrls.length + ' URLs', 'info', NAME);
