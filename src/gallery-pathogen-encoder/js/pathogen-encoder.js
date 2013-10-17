@@ -1,3 +1,9 @@
+/*
+Copyright 2013 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+http://yuilibrary.com/license/
+*/
+
 YUI.add('gallery-pathogen-encoder', function (Y, NAME) {
 
 var resolve = Y.Loader.prototype.resolve,
