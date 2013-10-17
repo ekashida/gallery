@@ -2,6 +2,9 @@
 
 ## @NEXT@
 
+
+## 0.1.2 (2013-10-17)
+
 - Fix "JSON is undefined" error
 
 
