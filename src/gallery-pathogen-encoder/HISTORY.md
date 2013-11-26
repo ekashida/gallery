@@ -2,6 +2,10 @@
 
 ## @NEXT@
 
+Changes:
+
+- Enable root config support for `path` module groups
+
 
 ## 0.1.2 (2013-10-17)
 
