@@ -226,10 +226,9 @@ function PrefixTree (config) {
         children: {}
     };
 
-    this.rootPrefixLen     = config.rootPrefix.length    || 0;
-    this.moduleDelimLen    = config.moduleDelim.length   || 0;
-    this.subgroupDelimLen  = config.subgroupDelim.length || 0;
-    this.groupDelimLen     = config.groupDelim.length    || 0;
+    this.moduleDelimLen   = config.moduleDelim   && config.moduleDelim.length   || 0;
+    this.subgroupDelimLen = config.subgroupDelim && config.subgroupDelim.length || 0;
+    this.groupDelimLen    = config.groupDelim    && config.groupDelim.length    || 0;
 }
 
 PrefixTree.prototype = {
