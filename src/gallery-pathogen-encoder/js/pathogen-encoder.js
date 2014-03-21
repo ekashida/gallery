@@ -213,9 +213,9 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
 };
 
 /**
-A class that represents a prefix tree data structure for file paths. The main
-purpose of this class is to optimally compress itself when the added paths need
-to be serialized.
+A prefix tree data structure for file paths. Can optimally compress itself into
+a serialized representation of a pathogen-encoded url.
+
 @class PrefixTree
 @constructor
 **/
@@ -235,12 +235,31 @@ PrefixTree.prototype = {
 
     /**
     Adds a path to the prefix tree instance. Calculates the weight of each node
-    as paths are added. The weight of a node represents the number of
-    characters in the the path value of the node, combined with the number of
-    characters in the path value of each of its children's paths (relative to
-    the node's path value).
+    as paths are added. The weight of a node represents the sum of:
+    1) the string length of the path represented by the root and the node
+    2) the string lengths of the paths represented by the node and each leaf node
+
+    For example, given the set of full paths:
+    some/cool/path
+    some/cool/other/path
+    some/awesome/path
+
+    The tree looks like:
+    some --> cool --> path
+        \        \--> other --> path
+         \--> awesome --> path
+
+    The weight of the `some` node is:
+    'some+cool/path,cool/other/path,awesome/path'.length
+
+    The weight of the `cool` node is:
+    'some/cool+path,other/path'.length
+
+    The weight of the `awesome` node is:
+    'some/awesome+path'.length
+
     @method add
-    @param {String} fullpath A path
+    @param {String} fullpath An absolute path
     **/
     add: function (fullpath) {
         var currentNode = this.tree,
@@ -279,8 +298,10 @@ PrefixTree.prototype = {
                     child.weight = Number.MAX_VALUE;
                 }
             } else {
-                // Account for the length of the module delimiter
-                child.weight += this.moduleDelimLen + remainingPath.length;
+                // add 'some/awesome/path' to existing 'some+cool/path'
+                // => some+cool/path,awesome/path
+                child.weight += this.moduleDelimLen     // ','.length
+                              + remainingPath.length;   // 'awesome/path'.length
             }
 
             // bubble down
@@ -291,11 +312,12 @@ PrefixTree.prototype = {
     },
 
     /**
-    Compresses the prefix tree. Uses a depth-first search to find the optimal
-    set of roots to serialize all the added paths.
+    Compresses the prefix tree. Uses DFS to find the optimal set of root paths
+    and their corresponding relative paths that results in the shortest
+    serialized length.
+
     @method compress
-    @return {Array} compressed An array of (root path, module path) pairs that
-        represent the the optimal way to serialize the prefix tree.
+    @return {Array} compressed An array of root path and relative path pairs
     **/
     compress: function () {
         var process     = [],
