@@ -53,11 +53,10 @@ Y.Loader.prototype.buildCombo = function (groups, comboBase, comboTail) {
             prepend = currDelim + currKey;
             prepend = prepend ? prepend + SUB_GROUP_DELIM : MODULE_DELIM;
 
-            // Since modules with custom paths are treated as their own
-            // segment, we override the prepend value so that it is only ever
-            // set to the group delimiter. TODO: refactor this while loop into
-            // one with multiple if-statements to make it easier to read.
-            if (group.key.indexOf('path') === 0) {
+            // Modules with custom paths have `group.key` set to the same value
+            // as their module name. These are treated as their own module
+            // group.
+            if (modules.length === 1 && currKey === modules[0]) {
                 prepend = currDelim;
             }
 
@@ -179,9 +178,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
                 continue;
             }
 
-            // Tag this module as `path` so that we know to include the
-            // full path in the combo url later on
-            key = 'path' + SUB_GROUP_DELIM + name;
+            key = name;
         }
 
         source[key] = source[key] || [];
