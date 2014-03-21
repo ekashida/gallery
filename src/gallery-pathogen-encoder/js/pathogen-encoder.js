@@ -196,7 +196,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
     if (prefixTree) {
         compressed = prefixTree.compress();
         for (i = 0, len = compressed.length; i < len; i += 1) {
-            key = 'p' + SUB_GROUP_DELIM + compressed[i].root;
+            key = compressed[i].root;
             source[key] = source[key] || [];
             source[key].push(compressed[i].name);
         }
