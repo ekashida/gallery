@@ -3,6 +3,14 @@
 ## @NEXT@
 
 
+## 1.0.0 (2014-03-21)
+
+- uses `core`, `gallery`, and `shifter` module groups for lossy compression
+- uses anonymous `fullpath` module group for everything else
+- deprecated `path` and `root` module groups
+- breaks compatibility with previous versions of yui-combo-middleware@1.0.0
+
+
 ## 0.1.3 (2013-11-26)
 
 Changes:
