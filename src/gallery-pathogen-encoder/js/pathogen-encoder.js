@@ -138,7 +138,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             key  = 'g' + SUB_GROUP_DELIM + galleryVersion;
         }
         // If the module was built the YUI way, then we segment these modules
-        // into the `root` group.
+        // into the `shifter` group.
         else if (mod.path.indexOf(name + '/' + name) === 0) {
             key = meta.root;
 
@@ -150,7 +150,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
                 key = key.slice(0, -1);
             }
 
-            key = 'r' + SUB_GROUP_DELIM + key;
+            key = 's' + SUB_GROUP_DELIM + key;
         }
         // If the path does not follow the YUI build convention, then we
         // add them to the prefix tree and subsequently segment these modules
