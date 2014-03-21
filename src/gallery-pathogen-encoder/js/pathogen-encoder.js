@@ -171,7 +171,6 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             // to the prefix tree for later compression
             if (Y.config.fullpathCompression) {
                 prefixTree = prefixTree || new PrefixTree({
-                    rootPrefix:     'p+',
                     moduleDelim:    MODULE_DELIM,
                     subgroupDelim:  SUB_GROUP_DELIM,
                     groupDelim:     GROUP_DELIM
@@ -305,7 +304,6 @@ PrefixTree.prototype = {
             children,
             root_re,
             leaves,
-            weight,
             total,
             child,
             node,
@@ -327,31 +325,23 @@ PrefixTree.prototype = {
 
             node = process.pop();
 
-            // Account for the length of the root prefix
-            weight = this.rootPrefixLen + node.weight;
-
             // Find the total resulting weight if we use the children of this
             // node as roots
             for (key in node.children) {
                 if (node.children.hasOwnProperty(key)) {
                     child = node.children[key];
-
-                    // Account for the length of the initial and subsequent
-                    // group delimiters for every additional root
-                    total += children.length ?
-                             this.groupDelimLen + this.rootPrefixLen :  // ;p+
-                             this.rootPrefixLen;                        //  p+
-
                     total += child.weight;
-
                     children.push(child);
                 }
             }
 
-            Y.log('Weight of the current root "' + node.path + '": ' + weight, 'debug', 'PrefixTree');
+            // Account for the group delimiter lengths
+            total += children.length - 1;
+
+            Y.log('Weight of the current root "' + node.path + '": ' + node.weight, 'debug', 'PrefixTree');
             Y.log('Combined weight of child roots: ' + total, 'debug', 'PrefixTree');
 
-            if (weight <= total) {
+            if (node.weight <= total) {
                 // If the weigth of this node is less than or equal to the
                 // total weight of its child nodes combined, it means that
                 // we'll get better compression by using this node as a root
