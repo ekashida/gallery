@@ -367,8 +367,8 @@ PrefixTree.prototype = {
 
                 root_re = new RegExp('^' + node.path + '/');
 
-                // Now that we've decided to use this node as a root, we can
-                // determine what the module names should be
+                // Now that we've decided to use this node (root path), we can
+                // determine what the module names (relative paths) should be
                 leaves = this.getLeafNodes(node);
                 for (i = 0; i < leaves.length; i += 1) {
                     compressed.push({
@@ -378,9 +378,10 @@ PrefixTree.prototype = {
                     });
                 }
             } else {
-                // If the weight of this node is greater than the total weight
-                // of its child nodes combined, it means that we'll get better
-                // compression by using each child node as an individual root.
+                // If the weight of this node is greater than the weight of its
+                // child nodes combined, it means that we'll get better
+                // compression by using the set of root paths represented by
+                // the child nodes
                 Y.log('Scheduling ' + children.length + ' child(ren) of "' + node.path + '" for further processing...', 'debug', 'PrefixTree');
                 process = process.concat(children);
             }
