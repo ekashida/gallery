@@ -287,10 +287,10 @@ PrefixTree.prototype = {
 
                 // If not leaf node
                 if (remainingPath) {
-                    child.weight += traversedPath.length + remainingPath.length;
-
-                    // Account for the length of the subgroup delimiter
-                    child.weight += this.subgroupDelimLen;
+                    // some/cool/path => some+cool/path
+                    child.weight = traversedPath.length   // 'some'.length
+                                 + this.subgroupDelimLen  // '+'.length
+                                 + remainingPath.length;  // 'cool/path'.length
 
                     child.children = {};
                 } else {
