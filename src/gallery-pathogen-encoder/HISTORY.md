@@ -3,6 +3,12 @@
 ## @NEXT@
 
 
+## 1.0.1 (2014-04-04)
+
+- optional trailing slash for customComboBase
+- print combo url count only when required
+
+
 ## 1.0.0 (2014-03-21)
 
 - uses `core`, `gallery`, and `shifter` module groups for lossy compression
