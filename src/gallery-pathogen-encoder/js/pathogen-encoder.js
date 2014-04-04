@@ -575,8 +575,9 @@ Y.Loader.prototype.resolve = function () {
     }
 
     // Add the pathogen namespace to the combo base.
-    if (Y.config.customComboBase) {
-        customComboBase = Y.config.customComboBase + NAMESPACE;
+    if (!customComboBase && Y.config.customComboBase) {
+        customComboBase = Y.config.customComboBase.replace(/\/+$/, '');
+        customComboBase += '/' + NAMESPACE;
     }
 
     // Fallback to the default combo url if we need to.
