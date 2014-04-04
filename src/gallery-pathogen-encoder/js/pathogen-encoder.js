@@ -606,6 +606,10 @@ Y.Loader.prototype.resolve = function () {
             resolved[urlKey] = resolvedUrls = resolved[urlKey] || [];
             resolved[modKey] = resolvedMods = resolved[modKey] || [];
 
+            // Potential issue here where we're not able to associate a single
+            // url to the module it corresponds to. We end up having to
+            // re-detect that a module needs to load as a single url in
+            // customResolve().
             for (i = 0, len = resolvedUrls.length; i < len; i += 1) {
                 url = resolvedUrls[i];
                 if (
