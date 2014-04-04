@@ -517,7 +517,9 @@ to see if Loader re-requests any module that we've already seen.
 Y.Loader.prototype.shouldFallback = function (resolved) {
     var modules,
         name,
-        type;
+        type,
+        len,
+        i;
 
     if (this.fallbackMode) {
         return this.fallbackMode;
