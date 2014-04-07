@@ -2,6 +2,9 @@
 
 ## @NEXT@
 
+
+## 1.0.2 (2014-04-07)
+
 - workaround for `express-yui` bug where `gallery-` prefix causes extended core
   to load as gallery module (https://github.com/yahoo/express-yui/issues/58)
 
