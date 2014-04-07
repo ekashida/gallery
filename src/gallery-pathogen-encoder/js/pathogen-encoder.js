@@ -4,8 +4,6 @@ Licensed under the BSD License.
 http://yuilibrary.com/license/
 */
 
-YUI.add('gallery-pathogen-encoder', function (Y, NAME) {
-
 var resolve = Y.Loader.prototype.resolve,
 
     NAMESPACE       = 'p/',
@@ -638,5 +636,3 @@ Y.Loader.prototype.resolve = function () {
 
     return resolved;
 };
-
-}, '@BETA@', { requires: ['loader-base'] });
